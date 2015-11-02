@@ -25,11 +25,13 @@ extern const AP_HAL::HAL& hal;
 
 bool Buzzer::init()
 {
+    // XXX [ms] disable external leds checking, which are disabled by default for Plane -> to make buzzer work for plane
+    /*
     // return immediately if disabled
     if (!AP_Notify::flags.external_leds) {
         return false;
     }
-
+    */
     // setup the pin and ensure it's off
     hal.gpio->pinMode(BUZZER_PIN, HAL_GPIO_OUTPUT);
     on(false);
@@ -44,10 +46,13 @@ bool Buzzer::init()
 // update - updates led according to timed_updated.  Should be called at 50Hz
 void Buzzer::update()
 {
+    // XXX [ms] disable external leds checking, which are disabled by default for Plane -> to make buzzer work for plane
+    /*
     // return immediately if disabled
     if (!AP_Notify::flags.external_leds) {
         return;
     }
+    */
 
     // check for arming failed event
     if (AP_Notify::events.arming_failed) {
