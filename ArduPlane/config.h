@@ -420,7 +420,9 @@
 
 // use this to disable geo-fencing
 #ifndef GEOFENCE_ENABLED
- # define GEOFENCE_ENABLED ENABLED
+ // # define GEOFENCE_ENABLED ENABLED
+ // XXX [ms] disable geofence to save some space, e.g. for buzzer
+ # define GEOFENCE_ENABLED DISABLED
 #endif
 
 // pwm value on FENCE_CHANNEL to use to enable fenced mode

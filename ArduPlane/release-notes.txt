@@ -1,6 +1,8 @@
 Release 3.4.0-sobi, 2nd November 2015
 -------------------------------------
-DEV version with active buzzer for APM2 enabled for Arming/Disarming, etc. on A5
+DEV version with:
+-active buzzer for APM2 enabled for Arming/Disarming, etc. on A5
+-deactivated GEOFENCE function to save some space
 
 Release 3.4.0, 24th September 2015
 ----------------------------------
