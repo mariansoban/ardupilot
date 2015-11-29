@@ -194,6 +194,36 @@ void Buzzer::update()
     if (AP_Notify::flags.failsafe_battery) {
         play_pattern(SINGLE_BUZZ);
     }
+
+    // XXX [ms] buzzer for GPS status
+    // gps
+    switch (AP_Notify::flags.gps_status) {
+        case 0:
+            // no GPS attached
+            break;
+
+        case 1:
+            // GPS attached but no lock, blink at 4Hz
+            break;
+
+        case 2:
+            // GPS attached but 2D lock, blink more slowly (around 2Hz)
+            break;
+
+        case 3:
+            // GPS 3D lock
+            if (_last_gps_status != AP_Notify::flags.gps_status) {
+                play_pattern(DOUBLE_BUZZ);
+            }
+            break;
+        default:
+            // GPS DGPS (4) or RTK (5) lock
+            if (_last_gps_status != AP_Notify::flags.gps_status) {
+                play_pattern(TRIPLE_BUZZ);
+            }
+            break;
+    }
+    _last_gps_status = AP_Notify::flags.gps_status;
 }
 
 // on - turns the buzzer on or off
