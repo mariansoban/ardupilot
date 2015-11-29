@@ -99,6 +99,32 @@ void Buzzer::update()
                         break;
                 }
                 return;
+                // FIXME [ms] buzzer for GPS status
+                case TRIPLE_BUZZ:
+                    // buzz for 10th of a second
+                    switch (_pattern_counter) {
+                        case 1:
+                            on(true);
+                            break;
+                        case 2:
+                            on(false);
+                            break;
+                        case 3:
+                            on(true);
+                            break;
+                        case 4:
+                            on(false);
+                            break;
+                        case 5:
+                            on(true);
+                            break;
+                        case 6:
+                        default:
+                            on(false);
+                            _pattern = NONE;
+                            break;
+                    }
+                    return;
             case ARMING_BUZZ:
                 // record start time
                 if (_pattern_counter == 1) {
