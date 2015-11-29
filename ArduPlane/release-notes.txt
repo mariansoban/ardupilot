@@ -1,3 +1,10 @@
+Release 3.4.0-sobi-v2, 29th November 2015
+-------------------------------------
+DEV version with:
+-added buzzer for some GPS fix statuses
+-bugfix of APM2 arming while boot (see: http://ardupilot.com/forum/viewtopic.php?f=113&t=14192 , https://github.com/diydrones/ardupilot/issues/3135)
+
+
 Release 3.4.0-sobi, 2nd November 2015
 -------------------------------------
 DEV version with:
