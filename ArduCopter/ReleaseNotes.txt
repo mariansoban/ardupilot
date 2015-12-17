@@ -1,5 +1,10 @@
 APM:Copter Release Notes:
 ------------------------------------------------------------------
+Copter 3.3.2-phl-sobi 18-Dec-2015 (DEV version)
+Changes from 3.3.2/3.3.2-rc2
+1) [ms] added buzzer for pixhawk lite on AUX6 (pin 55), instead of RELAY2
+2) [ms] compass deactivation by ID
+
 Copter 3.3.2-rc2 18-Nov-2015
 Changes from 3.3.2-rc1
 1) Bug fix for desired climb rate initialisation that could lead to drop when entering AltHold, Loiter, PosHold
