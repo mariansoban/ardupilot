@@ -265,6 +265,13 @@ const AP_Param::GroupInfo Compass::var_info[] PROGMEM = {
     AP_GROUPINFO("EXTERN3",23, Compass, _state[2].external, 0),
 #endif
 
+    // XXX [ms] compass deactivation by ID
+    // @Param: DISBYID
+    // @DisplayName: Disable compass by i2c device ID
+    // @Description: Makes possible to disable specific compass by its ID. E.g. set value 131594 to disable internal compass or 73225 for external compass on pixhawk.
+    // @User: Advanced
+    AP_GROUPINFO("DISBYID", 24, Compass, _disable_by_id, 0),
+
     AP_GROUPEND
 };
 

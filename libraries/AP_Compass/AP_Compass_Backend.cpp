@@ -79,6 +79,12 @@ void AP_Compass_Backend::set_dev_id(uint8_t instance, uint32_t dev_id)
 #endif
 }
 
+// XXX [ms] compass deactivation by ID
+uint32_t AP_Compass_Backend::get_disable_by_id()
+{
+    return _compass._disable_by_id.get();
+}
+
 /*
   set external for an instance
 */

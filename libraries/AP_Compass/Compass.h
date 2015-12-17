@@ -328,6 +328,8 @@ private:
         uint32_t    last_update_usec;
     } _state[COMPASS_MAX_INSTANCES];
 
+    AP_Int32    _disable_by_id; // XXX [ms] compass deactivation by ID
+
     // if we want HIL only
     bool _hil_mode:1;
 };
