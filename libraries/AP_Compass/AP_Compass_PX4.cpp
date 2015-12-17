@@ -79,11 +79,26 @@ bool AP_Compass_PX4::init(void)
         return false;
 	}
 
+	// XXX [ms] compass deactivation by ID
+	uint8_t to_register_counter = 0;
+	uint32_t id_to_disable = get_disable_by_id();
     for (uint8_t i=0; i<_num_sensors; i++) {
-        _instance[i] = register_compass();
-
         // get device id
-        set_dev_id(_instance[i], ioctl(_mag_fd[i], DEVIOCGDEVICEID, 0));
+        uint32_t compass_id = ioctl(_mag_fd[i], DEVIOCGDEVICEID, 0);
+        if (id_to_disable > 0 &&  id_to_disable == compass_id) {
+            // skip registration of this compass, decrease count
+        } else {
+            // register compass
+            _id_to_register[to_register_counter++] = compass_id;
+        }
+    }
+
+    for (uint8_t i=0; i<to_register_counter; i++) {
+    // for (uint8_t i=0; i<_num_sensors; i++) {
+        _instance[i] = register_compass();
+        // get device id
+        set_dev_id(_instance[i], _id_to_register[i]);
+        // set_dev_id(_instance[i], ioctl(_mag_fd[i], DEVIOCGDEVICEID, 0));
 
         // average over up to 20 samples
         if (ioctl(_mag_fd[i], SENSORIOCSQUEUEDEPTH, 20) != 0) {
@@ -96,7 +111,25 @@ bool AP_Compass_PX4::init(void)
         _count[i] = 0;
         _sum[i].zero();
     }
+/*
+    for (uint8_t i=0; i<_num_sensors; i++) {
+        _instance[i] = register_compass();
 
+        // get device id
+        set_dev_id(_instance[i], ioctl(_mag_fd[i], DEVIOCGDEVICEID, 0));
+
+        // average over up to 20 samples
+        if (ioctl(_mag_fd[i], SENSORIOCSQUEUEDEPTH, 20) != 0) {
+            hal.console->printf("Failed to setup compass queue\n");
+            return false;
+        }
+
+        // remember if the compass is external
+        set_external(_instance[i], ioctl(_mag_fd[i], MAGIOCGEXTERNAL, 0) > 0);
+        _count[i] = 0;
+        _sum[i].zero();
+    }
+*/
     // give the driver a chance to run, and gather one sample
     hal.scheduler->delay(40);
     accumulate();

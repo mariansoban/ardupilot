@@ -53,6 +53,8 @@ protected:
     // set dev_id for an instance
     void set_dev_id(uint8_t instance, uint32_t dev_id);
 
+    uint32_t get_disable_by_id(); // XXX [ms] compass deactivation by ID
+
     // set external state for an instance
     void set_external(uint8_t instance, bool external);
 
