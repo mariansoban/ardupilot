@@ -1,5 +1,11 @@
 APM:Copter Release Notes:
 ------------------------------------------------------------------
+Copter 3.3.3-phl-sobi-8fm 30-Mar-2016
+Changes from 3.3.3
+1) [ms] added possibility to switch between 8 flight modes by RC on CH5 (increased from default 6 flight modes)
+2) [ms] added buzzer for pixhawk lite on AUX6 (pin 55), instead of RELAY2
+3) [ms] compass deactivation by ID
+------------------------------------------------------------------
 Copter 3.3.3 24-Feb-2016 / 3.3.3-rc2 27-Jan-2016
 Changes from 3.3.3-rc1
 1) bug fix to Guided mode's velocity controller to run at 400hz
