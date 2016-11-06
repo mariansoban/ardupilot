@@ -6,7 +6,7 @@ Changes from 3.4.2
     a) reduce unnecessary EKF core switching and fix position reset
     b) attitude control does not limit rate if ATC_ACCEL_MAX is zero
     c) ignore arm command from GCS if already armed
-    d) set land-complete to false during auto takeoff 
+    d) set land-complete to false during auto takeoff
     e) onboard compass calibration memory init fix that could lead to failure to complete
 2) Minor Improvements:
     a) LeddarOne driver robustness improvements
@@ -23,9 +23,9 @@ Changes from 3.4.1
     d) arming check for compass health (was previously only a pre-arm check)
 2) Bug Fixes:
     a) compass calibration (onboard) fix to return completion status
-    b) LeddarOne driver busy-wait fix 
-    c) SBF GPS altitude and accuracy reporting fix 
-    d) MAV GPS uses existing configured baud rate instead of auto detecting 
+    b) LeddarOne driver busy-wait fix
+    c) SBF GPS altitude and accuracy reporting fix
+    d) MAV GPS uses existing configured baud rate instead of auto detecting
 ------------------------------------------------------------------
 Copter 3.4.1 01-Nov-2016
 Changes from 3.4.0
