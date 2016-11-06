@@ -24,7 +24,9 @@ void Copter::read_control_switch()
     else if (g.rc_5.get_radio_in() < 1491) switch_position = 2;
     else if (g.rc_5.get_radio_in() < 1621) switch_position = 3;
     else if (g.rc_5.get_radio_in() < 1750) switch_position = 4;
-    else switch_position = 5;
+    else if (g.rc_5.get_radio_in() < 1880) switch_position = 5; // XXX [ms] 8 modes switching
+    else if (g.rc_5.get_radio_in() < 1950) switch_position = 6; // XXX [ms] 8 modes switching
+    else switch_position = 7; // XXX [ms] 8 modes switching
 
     // store time that switch last moved
     if(control_switch_state.last_switch_position != switch_position) {

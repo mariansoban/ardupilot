@@ -310,6 +310,8 @@ public:
         k_param_flight_mode4,
         k_param_flight_mode5,
         k_param_flight_mode6,
+        k_param_flight_mode7, // XXX [ms] 8 modes switching
+        k_param_flight_mode8, // XXX [ms] 8 modes switching
         k_param_simple_modes,
 
         //
@@ -431,6 +433,8 @@ public:
     AP_Int8         flight_mode4;
     AP_Int8         flight_mode5;
     AP_Int8         flight_mode6;
+    AP_Int8         flight_mode7;   // XXX [ms] 8 modes switching
+    AP_Int8         flight_mode8;   // XXX [ms] 8 modes switching
     AP_Int8         simple_modes;
 
     // Misc
