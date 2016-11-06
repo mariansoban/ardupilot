@@ -358,8 +358,8 @@ void Copter::report_flight_modes()
     cliSerial->printf("Flight modes\n");
     print_divider();
 
-    for(int16_t i = 0; i < 6; i++ ) {
-        print_switch(i, (control_mode_t)flight_modes[i].get(), BIT_IS_SET(g.simple_modes, i));
+    for(int16_t i = 0; i < 8; i++ ) { // XXX [ms] 8 modes switching
+        print_switch(i, flight_modes[i], BIT_IS_SET(g.simple_modes, i));
     }
     print_blanks(2);
 }
