@@ -25,14 +25,18 @@ extern const AP_HAL::HAL& hal;
 
 bool Buzzer::init()
 {
+    // XXX [ms] PHL buzzer FIX
+    /*
     // return immediately if disabled
     if (!AP_Notify::flags.external_leds) {
         return false;
     }
+    */
 
     // setup the pin and ensure it's off
     hal.gpio->pinMode(BUZZER_PIN, HAL_GPIO_OUTPUT);
     on(false);
+    hal.gpio->write(BUZZER_PIN, 0); // XXX [ms] PHL buzzer FIX
 
     // set initial boot states. This prevents us issuing a arming
     // warning in plane and rover on every boot
@@ -94,6 +98,32 @@ void Buzzer::update()
                         break;
                 }
                 return;
+                // XXX [ms] PHL buzzer FIX
+                case TRIPLE_BUZZ:
+                    // buzz for 10th of a second
+                    switch (_pattern_counter) {
+                        case 1:
+                            on(true);
+                            break;
+                        case 2:
+                            on(false);
+                            break;
+                        case 3:
+                            on(true);
+                            break;
+                        case 4:
+                            on(false);
+                            break;
+                        case 5:
+                            on(true);
+                            break;
+                        case 6:
+                        default:
+                            on(false);
+                            _pattern = NONE;
+                            break;
+                    }
+                    return;
             case ARMING_BUZZ:
                 // record start time
                 if (_pattern_counter == 1) {
@@ -194,6 +224,36 @@ void Buzzer::update()
     if (AP_Notify::flags.failsafe_battery) {
         play_pattern(SINGLE_BUZZ);
     }
+
+    // XXX [ms] PHL buzzer FIX
+    // gps
+    switch (AP_Notify::flags.gps_status) {
+        case 0:
+            // no GPS attached
+            break;
+
+        case 1:
+            // GPS attached but no lock, blink at 4Hz
+            break;
+
+        case 2:
+            // GPS attached but 2D lock, blink more slowly (around 2Hz)
+            break;
+
+        case 3:
+            // GPS 3D lock
+            if (_last_gps_status != AP_Notify::flags.gps_status) {
+                play_pattern(DOUBLE_BUZZ);
+            }
+            break;
+        default:
+            // GPS DGPS (4) or RTK (5) lock
+            if (_last_gps_status != AP_Notify::flags.gps_status) {
+                play_pattern(TRIPLE_BUZZ);
+            }
+            break;
+    }
+    _last_gps_status = AP_Notify::flags.gps_status;
 }
 
 // on - turns the buzzer on or off
@@ -208,6 +268,7 @@ void Buzzer::on(bool turn_on)
     _flags.on = turn_on;
 
     // pull pin high or low
+    hal.gpio->pinMode(BUZZER_PIN, HAL_GPIO_OUTPUT); // XXX [ms] PHL buzzer FIX
     hal.gpio->write(BUZZER_PIN, _flags.on);
 }
 

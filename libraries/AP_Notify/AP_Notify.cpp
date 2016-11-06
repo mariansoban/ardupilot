@@ -76,13 +76,17 @@ struct AP_Notify::notify_events_type AP_Notify::events;
     ToneAlarm_PX4_Solo tonealarm;
 #else
     ToneAlarm_PX4 tonealarm;
+    Buzzer buzzer;  // XXX [ms] PHL buzzer FIX
+
 #endif
 
 #if AP_NOTIFY_OREOLED == 1
     OreoLED_PX4 oreoled;
-    NotifyDevice *AP_Notify::_devices[] = {&boardled, &toshibaled, &tonealarm, &oreoled};
+    // NotifyDevice *AP_Notify::_devices[] = {&boardled, &toshibaled, &tonealarm, &oreoled};
+    NotifyDevice *AP_Notify::_devices[] = {&boardled, &toshibaled, &tonealarm, &oreoled, &buzzer}; // XXX [ms] PHL buzzer FIX
 #else
-    NotifyDevice *AP_Notify::_devices[] = {&boardled, &toshibaled, &tonealarm};
+    // NotifyDevice *AP_Notify::_devices[] = {&boardled, &toshibaled, &tonealarm};
+    NotifyDevice *AP_Notify::_devices[] = {&boardled, &toshibaled, &tonealarm, &buzzer}; // XXX [ms] PHL buzzer FIX
 #endif
 
 #elif CONFIG_HAL_BOARD == HAL_BOARD_VRBRAIN
