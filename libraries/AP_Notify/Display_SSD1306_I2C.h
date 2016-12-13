@@ -6,15 +6,18 @@
 #define SSD1306_ROWS 128		    // display rows
 #define SSD1306_COLUMNS 64		    // display columns
 #define SSD1306_COLUMNS_PER_PAGE 8
-
+// XXX oled
 class Display_SSD1306_I2C: public Display {
 public:
     virtual bool hw_init();
     virtual bool hw_update();
     virtual bool set_pixel(uint16_t x, uint16_t y);
     virtual bool clear_pixel(uint16_t x, uint16_t y);
+    virtual bool clear_screen();
 
 private:
     AP_HAL::OwnPtr<AP_HAL::I2CDevice> _dev;
     uint8_t _displaybuffer[SSD1306_ROWS * SSD1306_COLUMNS_PER_PAGE];
+    bool _need_hw_update;
+    bool _timer(void);
 };

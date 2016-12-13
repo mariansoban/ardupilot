@@ -65,12 +65,15 @@ AP_Notify::AP_Notify()
 }
 
 // static flags, to allow for direct class update from device drivers
-struct AP_Notify::notify_flags_type AP_Notify::flags;
+// struct AP_Notify::notify_flags_type AP_Notify::flags;
+struct AP_Notify::notify_flags_and_values_type AP_Notify::flags; // XXX oled
 struct AP_Notify::notify_events_type AP_Notify::events;
+char AP_Notify::_send_text[NOTIFY_TEXT_BUFFER_SIZE] {}; // XXX oled
 
 #if CONFIG_HAL_BOARD == HAL_BOARD_PX4
     AP_BoardLED boardled;
     ToshibaLED_PX4 toshibaled;
+    Display_SSD1306_I2C display; // XXX oled
 
 #if AP_NOTIFY_SOLO_TONES == 1
     ToneAlarm_PX4_Solo tonealarm;
@@ -83,10 +86,10 @@ struct AP_Notify::notify_events_type AP_Notify::events;
 #if AP_NOTIFY_OREOLED == 1
     OreoLED_PX4 oreoled;
     // NotifyDevice *AP_Notify::_devices[] = {&boardled, &toshibaled, &tonealarm, &oreoled};
-    NotifyDevice *AP_Notify::_devices[] = {&boardled, &toshibaled, &tonealarm, &oreoled, &buzzer}; // XXX [ms] PHL buzzer FIX
+    NotifyDevice *AP_Notify::_devices[] = {&boardled, &toshibaled, &tonealarm, &oreoled, &buzzer, &display}; // XXX [ms] PHL buzzer FIX // XXX oled
 #else
     // NotifyDevice *AP_Notify::_devices[] = {&boardled, &toshibaled, &tonealarm};
-    NotifyDevice *AP_Notify::_devices[] = {&boardled, &toshibaled, &tonealarm, &buzzer}; // XXX [ms] PHL buzzer FIX
+    NotifyDevice *AP_Notify::_devices[] = {&boardled, &toshibaled, &tonealarm, &buzzer, &display}; // XXX [ms] PHL buzzer FIX // XXX oled
 #endif
 
 #elif CONFIG_HAL_BOARD == HAL_BOARD_VRBRAIN

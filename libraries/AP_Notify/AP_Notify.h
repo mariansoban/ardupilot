@@ -18,6 +18,8 @@
 #include <AP_Param/AP_Param.h>
 #include <GCS_MAVLink/GCS_MAVLink.h>
 
+// XXX oled
+#include <stdio.h>  // for sprintf
 #include "NotifyDevice.h"
 
 
@@ -37,6 +39,9 @@
 #define BUZZER_ON       1
 #define BUZZER_OFF      0
 
+// XXX oled
+#define NOTIFY_TEXT_BUFFER_SIZE 51
+
 class AP_Notify
 {
     friend class RGBLed;    // RGBLed needs access to notify parameters
@@ -45,10 +50,13 @@ public:
     AP_Notify();
 
     /// notify_flags_type - bitmask of notification flags
-    struct notify_flags_type {
+    // struct notify_flags_type {
+    struct notify_flags_and_values_type { // XXX oled
         uint32_t initialising       : 1;    // 1 if initialising and copter should not be moved
         uint32_t gps_status         : 3;    // 0 = no gps, 1 = no lock, 2 = 2d lock, 3 = 3d lock, 4 = dgps lock, 5 = rtk lock
         uint32_t gps_num_sats       : 6;    // number of sats
+        float    battery_voltage       ;    // battery voltage // XXX oled
+        uint32_t flight_mode        : 8;    // flight mode // XXX oled
         uint32_t armed              : 1;    // 0 = disarmed, 1 = armed
         uint32_t pre_arm_check      : 1;    // 0 = failing checks, 1 = passed
         uint32_t pre_arm_gps_check  : 1;    // 0 = failing pre-arm GPS checks, 1 = passed
@@ -90,10 +98,16 @@ public:
         uint32_t tune_save              : 1;    // tuning saved parameters
         uint32_t tune_error             : 1;    // tuning controller error
     };
-
+/*
     // the notify flags are static to allow direct class access
     // without declaring the object
     static struct notify_flags_type flags;
+*/
+    // XXX oled
+    // The notify flags and values are static to allow direct class access
+    // without declaring the object.
+    static struct notify_flags_and_values_type flags;
+
     static struct notify_events_type events;
 
     // initialisation
@@ -111,9 +125,13 @@ public:
     static const struct AP_Param::GroupInfo var_info[];
 
     bool buzzer_enabled() const { return _buzzer_enable; }
+
+    static void send_text(const char *str) { snprintf(_send_text, sizeof(_send_text), "%s", str); } // XXX oled
+    static char* get_text() { return _send_text; } // XXX oled
 private:
     static NotifyDevice* _devices[];
 
+    static char _send_text[NOTIFY_TEXT_BUFFER_SIZE]; // XXX oled
     AP_Int8 _rgb_led_brightness;
     AP_Int8 _rgb_led_override;
     AP_Int8 _buzzer_enable;
