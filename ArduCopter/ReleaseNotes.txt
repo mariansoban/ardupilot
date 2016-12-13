@@ -1,5 +1,9 @@
 APM:Copter Release Notes:
 ------------------------------------------------------------------
+Copter 3.4.3-phl-sobi-8fm-0 13-Dec-2016
+Changes from 3.4.3-phl-sobi-8fm
+1) [ms] added support for i2c OLED with SSD1306 driver by Alexey Kozin
+------------------------------------------------------------------
 Copter 3.4.3-phl-sobi-8fm 02-Dec-2016
 Changes from 3.4.3
 1) [ms] added buzzer for pixhawk lite on AUX6 (pin 55), instead of RELAY2
