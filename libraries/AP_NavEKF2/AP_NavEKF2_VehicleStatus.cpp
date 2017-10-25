@@ -262,9 +262,9 @@ void NavEKF2_core::calcGpsGoodForFlight(void)
     sAccFilterState2 = MAX(sAccFilterState1,((1.0f - alpha2) * sAccFilterState2));
 
     // Apply a threshold test with hysteresis to the filtered GPS speed accuracy data
-    if (sAccFilterState2 > 1.5f ) {
+    if (sAccFilterState2 > 2.5f ) { // XXX [ms] to avoid bad ahrs for arming
         gpsSpdAccPass = false;
-    } else if(sAccFilterState2 < 1.0f) {
+    } else if(sAccFilterState2 < 2.0f) { // XXX [ms] to avoid bad ahrs for arming
         gpsSpdAccPass = true;
     }
 
