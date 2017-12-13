@@ -170,8 +170,12 @@ void AP_Compass_QMC5883L::timer()
     uint32_t now = AP_HAL::micros();
 
     auto x = -static_cast<int16_t>(le16toh(buffer.rx));
-    auto y = static_cast<int16_t>(le16toh(buffer.ry));
-    auto z = -static_cast<int16_t>(le16toh(buffer.rz));
+    // XXX [ms] fix of z-axis for external compass
+    // auto y = static_cast<int16_t>(le16toh(buffer.ry));
+    auto y = -static_cast<int16_t>(le16toh(buffer.ry));
+    // XXX [ms] fix of z-axis for external compass
+    // auto z = -static_cast<int16_t>(le16toh(buffer.rz));
+    auto z = static_cast<int16_t>(le16toh(buffer.rz));
 
 #if 0
     printf("mag.x:%d\n",x);
