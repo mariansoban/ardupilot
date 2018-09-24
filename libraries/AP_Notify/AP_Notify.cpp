@@ -114,7 +114,9 @@ void AP_Notify::init(bool enable_external_leds)
         _devices[0] = new AP_BoardLED();
         _devices[1] = new ToshibaLED_I2C();
         _devices[2] = new ToneAlarm_PX4();
-        _devices[3] = new Display();
+        // _devices[3] = new Display(); // XXX [ms] PHL buzzer FIX
+        _devices[4] = new Display(); // XXX [ms] PHL buzzer FIX
+        _devices[3] = new Buzzer(); // XXX [ms] PHL buzzer FIX
     #endif
 
 // Notify devices for VRBRAIN boards

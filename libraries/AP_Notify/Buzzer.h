@@ -23,6 +23,9 @@
  # define BUZZER_PIN    32
 #elif CONFIG_HAL_BOARD == HAL_BOARD_LINUX && CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_BBBMINI
  # define BUZZER_PIN     11 // GPIO P8_32
+#elif CONFIG_HAL_BOARD == HAL_BOARD_PX4 // XXX [ms] PHL buzzer FIX
+  # define BUZZER_PIN    55 // AUX6/AUX OUT 6 on pixhawk - instead of RELAY2
+  // # define BUZZER_PIN    0
 #else
  # define BUZZER_PIN     0 // pin undefined on other boards
 #endif
@@ -56,6 +59,7 @@ public:
         NONE = 0,
         SINGLE_BUZZ = 1,
         DOUBLE_BUZZ = 2,
+        TRIPLE_BUZZ = 20, // XXX [ms] PHL buzzer FIX
         GPS_GLITCH = 3, // not used
         ARMING_BUZZ = 4,
         BARO_GLITCH = 5,
@@ -80,4 +84,5 @@ private:
     BuzzerPattern   _pattern;           // current pattern
     uint8_t         _pattern_counter;   // used to time on/off of current patter
     uint32_t        _arming_buzz_start_ms;  // arming_buzz start time in milliseconds
+    uint32_t        _last_gps_status; // XXX [ms] PHL buzzer FIX
 };
