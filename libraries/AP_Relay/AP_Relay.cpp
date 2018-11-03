@@ -17,7 +17,8 @@
 
   #elif !defined(CONFIG_ARCH_BOARD_PX4FMU_V4)
     #define RELAY1_PIN_DEFAULT 54
-    #define RELAY2_PIN_DEFAULT 55
+    // XXX [ms] PHL buzzer FIX
+    #define RELAY2_PIN_DEFAULT -1
   #endif
 
 #elif CONFIG_HAL_BOARD == HAL_BOARD_VRBRAIN
