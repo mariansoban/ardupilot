@@ -151,7 +151,8 @@ const AP_Param::GroupInfo AP_Notify::var_info[] = {
     // @Description: Enables to connect active buzzer to arbitrary pin. Requires 3-pin buzzer or additional MOSFET!
     // @Values: 0:Disabled
     // @User: Advanced
-    AP_GROUPINFO("BUZZ_PIN", 5, AP_Notify, _buzzer_pin, 0),
+    // AP_GROUPINFO("BUZZ_PIN", 5, AP_Notify, _buzzer_pin, 0),
+    AP_GROUPINFO("BUZZ_PIN", 5, AP_Notify, _buzzer_pin, 55), // XXX [ms] PHL buzzer FIX
 #endif
 
     // @Param: LED_TYPES
@@ -274,7 +275,6 @@ void AP_Notify::add_backends(void)
         }
     }
 
-
     // Always try and add a display backend
     ADD_BACKEND(new Display());
 
@@ -282,6 +282,7 @@ void AP_Notify::add_backends(void)
 #if CONFIG_HAL_BOARD == HAL_BOARD_PX4 || \
     CONFIG_HAL_BOARD == HAL_BOARD_VRBRAIN
     ADD_BACKEND(new AP_ToneAlarm());
+    ADD_BACKEND(new Buzzer()); // XXX [ms] PHL buzzer FIX
 
 // ChibiOS noise makers
 #elif CONFIG_HAL_BOARD == HAL_BOARD_CHIBIOS

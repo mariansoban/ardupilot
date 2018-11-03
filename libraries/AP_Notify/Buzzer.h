@@ -43,6 +43,7 @@ public:
         NONE = 0,
         SINGLE_BUZZ = 1,
         DOUBLE_BUZZ = 2,
+        TRIPLE_BUZZ = 20, // XXX [ms] PHL buzzer FIX
         GPS_GLITCH = 3, // not used
         ARMING_BUZZ = 4,
         BARO_GLITCH = 5,
@@ -68,4 +69,5 @@ private:
     uint8_t         _pattern_counter;   // used to time on/off of current patter
     uint32_t        _arming_buzz_start_ms;  // arming_buzz start time in milliseconds
     uint8_t         _pin;
+    uint32_t        _last_gps_status; // XXX [ms] PHL buzzer FIX
 };
