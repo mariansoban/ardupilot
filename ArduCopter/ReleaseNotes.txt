@@ -1,5 +1,10 @@
 ArduPilot Copter Release Notes:
 ------------------------------------------------------------------
+Copter 3.6.1-sobi-phl-8fm 13-Nov-2018
+Changes from 3.6.1
+1) [ms] added buzzer for pixhawk lite on AUX6 (pin 55), instead of RELAY2; also added buzzer patterns for GPS fix
+2) [ms] added possibility to switch between 8 flight modes by RC on CH5
+------------------------------------------------------------------
 Copter 3.6.1 10-Nov-2018 / 3.6.1-rc1 06-Nov-2018
 Changes from 3.6.0
 1) Garmin LidarLite V3HP support 
