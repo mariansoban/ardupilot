@@ -118,6 +118,10 @@ void Plane::init_ardupilot()
     // setup frsky, and pass a number of parameters to the library
     frsky_telemetry.init(serial_manager, MAV_TYPE_FIXED_WING);
 #endif
+#if LTM_ENABLED == ENABLED
+	// setup ltm, and pass a number of parameters to the library
+	ltm.init(serial_manager, MAV_TYPE_FIXED_WING);
+#endif
 #if DEVO_TELEM_ENABLED == ENABLED
     devo_telemetry.init(serial_manager);
 #endif

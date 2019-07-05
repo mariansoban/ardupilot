@@ -59,6 +59,11 @@
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
+
+#ifndef LTM_ENABLED
+  #  define LTM_ENABLED    ENABLED
+#endif
+
 // Optical flow sensor support
 //
 
