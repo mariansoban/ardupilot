@@ -73,7 +73,7 @@ void AP_LTM::generate_Gframe(void){
     LTBuff[13]=(_uav.alt >> 8*1) & 0xFF;
     LTBuff[14]=(_uav.alt >> 8*2) & 0xFF;
     LTBuff[15]=(_uav.alt >> 8*3) & 0xFF;
-    LTBuff[16]= ((_uav.sats_visible << 2 )& 0xFF) | (_uav.fix_type & 0b00000011) ; // last 6 bits: sats number, first 2:fix type (0,1,2,3)
+    LTBuff[16]= ((_uav.sats_visible << 2 )& 0xFF) | ((_uav.fix_type > 3 ? 3 : _uav.fix_type) & 0b00000011) ; // last 6 bits: sats number, first 2:fix type (0,1,2,3)
 	send_LTM(LTBuff, LTM_GFRAME_SIZE);
     _ltm_scheduler++;
 }
