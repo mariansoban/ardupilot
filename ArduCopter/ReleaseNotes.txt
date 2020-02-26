@@ -1,5 +1,10 @@
 ArduPilot Copter Release Notes:
 ------------------------------------------------------------------
+Copter 4.0.2-sobi-phl-8fm 27-Feb-2020
+Changes from 4.0.2
+1) [ms] added buzzer support for pixhawk lite e.g. on AUX6 (pin 55), added buzzer patterns for GPS fix
+2) [ms] added possibility to switch between 8 flight modes by RC on CH5
+------------------------------------------------------------------
 Copter 4.0.2 11-Feb-2020
 Changes from 4.0.2-rc4
 1) MAVFTP stack size increased to 3k (fixes reboot when using MAVFTP)
