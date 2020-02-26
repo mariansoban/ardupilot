@@ -289,17 +289,31 @@ const AP_Param::Info Copter::var_info[] = {
 
     // @Param: FLTMODE5
     // @DisplayName: Flight Mode 5
-    // @Description: Flight mode when Channel 5 pwm is >1620, <= 1749
+    // @Description: Flight mode when Channel 5 pwm is >1620, <= 1750
     // @Values: 0:Stabilize,1:Acro,2:AltHold,3:Auto,4:Guided,5:Loiter,6:RTL,7:Circle,9:Land,11:Drift,13:Sport,14:Flip,15:AutoTune,16:PosHold,17:Brake,18:Throw,19:Avoid_ADSB,20:Guided_NoGPS,21:Smart_RTL,22:FlowHold,23:Follow,24:ZigZag,25:SystemID,26:Heli_Autorotate
     // @User: Standard
     GSCALAR(flight_mode5, "FLTMODE5",               (uint8_t)FLIGHT_MODE_5),
 
     // @Param: FLTMODE6
     // @DisplayName: Flight Mode 6
-    // @Description: Flight mode when Channel 5 pwm is >=1750
+    // @Description: Flight mode when Channel 5 pwm is >1750 and <= 1880
     // @Values: 0:Stabilize,1:Acro,2:AltHold,3:Auto,4:Guided,5:Loiter,6:RTL,7:Circle,9:Land,11:Drift,13:Sport,14:Flip,15:AutoTune,16:PosHold,17:Brake,18:Throw,19:Avoid_ADSB,20:Guided_NoGPS,21:Smart_RTL,22:FlowHold,23:Follow,24:ZigZag,25:SystemID,26:Heli_Autorotate
     // @User: Standard
     GSCALAR(flight_mode6, "FLTMODE6",               (uint8_t)FLIGHT_MODE_6),
+
+    // @Param: FLTMODE7 // XXX [ms] 8 modes switching
+    // @DisplayName: Flight Mode 7
+    // @Description: Flight mode when Channel 5 pwm is >1880 and <= 1950
+    // @Values: 0:Stabilize,1:Acro,2:AltHold,3:Auto,4:Guided,5:Loiter,6:RTL,7:Circle,9:Land,11:Drift,13:Sport,14:Flip,15:AutoTune,16:PosHold,17:Brake,18:Throw,19:Avoid_ADSB,20:Guided_NoGPS,21:Smart_RTL,22:FlowHold,23:Follow,24:ZigZag,25:SystemID,26:Heli_Autorotate
+    // @User: Standard
+    GSCALAR(flight_mode7, "FLTMODE7",               (uint8_t)FLIGHT_MODE_7),
+
+    // @Param: FLTMODE8 // XXX [ms] 8 modes switching
+    // @DisplayName: Flight Mode 8
+    // @Description: Flight mode when Channel 5 pwm is > 1950
+    // @Values: 0:Stabilize,1:Acro,2:AltHold,3:Auto,4:Guided,5:Loiter,6:RTL,7:Circle,9:Land,11:Drift,13:Sport,14:Flip,15:AutoTune,16:PosHold,17:Brake,18:Throw,19:Avoid_ADSB,20:Guided_NoGPS,21:Smart_RTL,22:FlowHold,23:Follow,24:ZigZag,25:SystemID,26:Heli_Autorotate
+    // @User: Standard
+    GSCALAR(flight_mode8, "FLTMODE8",               (uint8_t)FLIGHT_MODE_8),
 
     // @Param: FLTMODE_CH
     // @DisplayName: Flightmode channel
