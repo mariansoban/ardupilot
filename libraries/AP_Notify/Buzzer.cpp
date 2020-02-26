@@ -56,6 +56,10 @@ bool Buzzer::init()
     // warning in plane and rover on every boot
     _flags.armed = AP_Notify::flags.armed;
     _flags.failsafe_battery = AP_Notify::flags.failsafe_battery;
+    
+    on(false); // XXX [ms] PHL buzzer FIX - ensure twice more, that buzzer pin is in off state
+    hal.gpio->write(_pin, HAL_BUZZER_OFF);
+    // Note: Don't forget to set NTF_BUZZ_PIN to 55 for PHL for buzzer on AUX6
     return true;
 }
 
@@ -114,6 +118,37 @@ void Buzzer::update_pattern_to_play()
         play_pattern(SINGLE_BUZZ);
         return;
     }
+
+
+    // XXX [ms] PHL buzzer FIX
+    // gps
+    switch (AP_Notify::flags.gps_status) {
+        case 0:
+            // no GPS attached
+            break;
+
+        case 1:
+            // GPS attached but no lock, blink at 4Hz
+            break;
+
+        case 2:
+            // GPS attached but 2D lock, blink more slowly (around 2Hz)
+            break;
+
+        case 3:
+            // GPS 3D lock
+            if (_last_gps_status != AP_Notify::flags.gps_status) {
+                play_pattern(DOUBLE_BUZZ);
+            }
+            break;
+        default:
+            // GPS DGPS (4) or RTK (5) lock
+            if (_last_gps_status != AP_Notify::flags.gps_status) {
+                play_pattern(TRIPLE_BUZZ);
+            }
+            break;
+    }
+    _last_gps_status = AP_Notify::flags.gps_status;
 }
 
 
