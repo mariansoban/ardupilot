@@ -403,8 +403,10 @@ void RC_Channel::read_mode_switch()
     else if (pulsewidth < 1361) position = 1;
     else if (pulsewidth < 1491) position = 2;
     else if (pulsewidth < 1621) position = 3;
-    else if (pulsewidth < 1750) position = 4;
-    else position = 5;
+    else if (pulsewidth < 1751) position = 4;
+    else if (pulsewidth < 1881) position = 5;
+    else if (pulsewidth < 1951) position = 6;
+    else position = 7;
 
     if (!debounce_completed(position)) {
         return;

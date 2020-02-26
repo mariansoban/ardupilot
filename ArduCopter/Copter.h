@@ -269,7 +269,7 @@ private:
 
     // flight modes convenience array
     AP_Int8 *flight_modes;
-    const uint8_t num_flight_modes = 6;
+    const uint8_t num_flight_modes = 8; // XXX [ms] 8 modes switching
 
     struct RangeFinderState {
         bool enabled:1;
