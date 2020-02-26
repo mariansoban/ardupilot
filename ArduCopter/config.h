@@ -427,6 +427,14 @@
 #ifndef FLIGHT_MODE_6
  # define FLIGHT_MODE_6                  Mode::Number::STABILIZE
 #endif
+// XXX [ms] 8 modes switching
+#ifndef FLIGHT_MODE_7
+ # define FLIGHT_MODE_7                  Mode::Number::STABILIZE
+#endif
+// XXX [ms] 8 modes switching
+#ifndef FLIGHT_MODE_8
+ # define FLIGHT_MODE_8                  Mode::Number::STABILIZE
+#endif
 
 
 //////////////////////////////////////////////////////////////////////////////
