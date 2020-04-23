@@ -1,3 +1,8 @@
+Release 4.0.5-sobi-frsky, 23th April 2020
+-----------------------------
+Changes from 4.0.5
+1) [ms] disabled annoying frsky telemetry message "Bad or No Terrain Data"
+
 Release 4.0.5, 4th March 2020
 -----------------------------
 
