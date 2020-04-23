@@ -1,3 +1,8 @@
+Release 4.0.5-sobi-frsky, 13th March 2021
+-----------------------------
+Changes from 4.0.5
+1) [ms] disabled annoying frsky telemetry message "Bad or No Terrain Data"
+
 Release 4.0.9, 23rd February 2021
 ---------------------------------
 
@@ -401,7 +406,6 @@ MissionPlanner.
 Many thanks to everyone who contributed to and tested this release!
 
 Happy flying!
-
 
 Release 4.0.5, 4th March 2020
 -----------------------------
