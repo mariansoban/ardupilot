@@ -640,9 +640,10 @@ void AP_Frsky_Telem::check_sensor_status_flags(void)
         } else if ((_sensor_status_flags & MAV_SYS_STATUS_SENSOR_OPTICAL_FLOW) > 0) {
             queue_message(MAV_SEVERITY_CRITICAL, "Bad OptFlow Health");
             check_sensor_status_timer = now;
-        } else if ((_sensor_status_flags & MAV_SYS_STATUS_TERRAIN) > 0) {
+        // XXX [ms] disable annoying "Bad or No Terrain Data" message
+        /* } else if ((_sensor_status_flags & MAV_SYS_STATUS_TERRAIN) > 0) {
             queue_message(MAV_SEVERITY_CRITICAL, "Bad or No Terrain Data");
-            check_sensor_status_timer = now;
+            check_sensor_status_timer = now;*/
         } else if ((_sensor_status_flags & MAV_SYS_STATUS_GEOFENCE) > 0) {
             queue_message(MAV_SEVERITY_CRITICAL, "Geofence Breach");
             check_sensor_status_timer = now;
