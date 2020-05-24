@@ -572,10 +572,24 @@ const AP_Param::Info Plane::var_info[] = {
 
     // @Param: FLTMODE6
     // @DisplayName: FlightMode6
-    // @Description: Flight mode for switch position 6 (1750 to 2049)
+    // @Description: Flight mode for switch position 6 (1750 to 1880)
     // @Values: 0:Manual,1:CIRCLE,2:STABILIZE,3:TRAINING,4:ACRO,5:FBWA,6:FBWB,7:CRUISE,8:AUTOTUNE,10:Auto,11:RTL,12:Loiter,13:TAKEOFF,14:AVOID_ADSB,15:Guided,17:QSTABILIZE,18:QHOVER,19:QLOITER,20:QLAND,21:QRTL,22:QAUTOTUNE,23:QACRO
     // @User: Standard
     GSCALAR(flight_mode6,           "FLTMODE6",       FLIGHT_MODE_6),
+
+    // @Param: FLTMODE7
+    // @DisplayName: FlightMode7
+    // @Description: Flight mode for switch position 7 (1881 to 1950)
+    // @Values: 0:Manual,1:CIRCLE,2:STABILIZE,3:TRAINING,4:ACRO,5:FBWA,6:FBWB,7:CRUISE,8:AUTOTUNE,10:Auto,11:RTL,12:Loiter,13:TAKEOFF,14:AVOID_ADSB,15:Guided,17:QSTABILIZE,18:QHOVER,19:QLOITER,20:QLAND,21:QRTL,22:QAUTOTUNE,23:QACRO
+    // @User: Standard
+    GSCALAR(flight_mode7,           "FLTMODE7",       FLIGHT_MODE_7),
+
+    // @Param: FLTMODE8
+    // @DisplayName: FlightMode8
+    // @Description: Flight mode for switch position 8 (1951 to 2049)
+    // @Values: 0:Manual,1:CIRCLE,2:STABILIZE,3:TRAINING,4:ACRO,5:FBWA,6:FBWB,7:CRUISE,8:AUTOTUNE,10:Auto,11:RTL,12:Loiter,13:TAKEOFF,14:AVOID_ADSB,15:Guided,17:QSTABILIZE,18:QHOVER,19:QLOITER,20:QLAND,21:QRTL,22:QAUTOTUNE,23:QACRO
+    // @User: Standard
+    GSCALAR(flight_mode8,           "FLTMODE8",       FLIGHT_MODE_8),
 
     // @Param: INITIAL_MODE
     // @DisplayName: Initial flight mode
