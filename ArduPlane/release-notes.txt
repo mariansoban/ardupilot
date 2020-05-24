@@ -1,3 +1,8 @@
+Release 4.0.5-sobi-frsky-8m, 24th May 2020
+-----------------------------
+Changes from 4.0.5-sobi-frsky
+1) [ms] added possibility to switch between 8 flight modes by RC for Plane
+
 Release 4.0.5-sobi-frsky, 23th April 2020
 -----------------------------
 Changes from 4.0.5
