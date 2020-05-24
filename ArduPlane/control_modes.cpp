@@ -147,7 +147,9 @@ uint8_t Plane::readSwitch(void)
     if (pulsewidth <= 1490) return 2;
     if (pulsewidth <= 1620) return 3;
     if (pulsewidth <= 1749) return 4;              // Software Manual
-    return 5;                                                           // Hardware Manual
+    if (pulsewidth <= 1879) return 5;
+    if (pulsewidth <= 1949) return 6;
+    return 7;                                                           // Hardware Manual
 }
 
 void Plane::reset_control_switch()

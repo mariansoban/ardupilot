@@ -298,6 +298,8 @@ public:
         k_param_flight_mode4,
         k_param_flight_mode5,
         k_param_flight_mode6,
+        k_param_flight_mode7, // XXX [ms] 8 modes switching
+        k_param_flight_mode8, // XXX [ms] 8 modes switching
         k_param_initial_mode,
         k_param_land_slope_recalc_shallow_threshold,    // unused - moved to AP_Landing
         k_param_land_slope_recalc_steep_threshold_to_abort, // unused - moved to AP_Landing
@@ -433,6 +435,8 @@ public:
     AP_Int8 flight_mode4;
     AP_Int8 flight_mode5;
     AP_Int8 flight_mode6;
+    AP_Int8 flight_mode7; // XXX [ms] 8 modes switching
+    AP_Int8 flight_mode8; // XXX [ms] 8 modes switching
     AP_Int8 initial_mode;
 
     // Navigational maneuvering limits
