@@ -1,8 +1,10 @@
-Release 4.0.9-sobi-frsky-8m, 13th March 2021
+
+Release 4.0.5-sobi-frsky-8m-ltm, 13th March 2021
 -----------------------------
 Changes from 4.0.9
 1) [ms] disabled annoying frsky telemetry message "Bad or No Terrain Data"
 2) [ms] added possibility to switch between 8 flight modes by RC for Plane
+3) [ms] added support for LTM telemetry protocol - serial protocol index 25:LTM
 
 Release 4.0.9, 23rd February 2021
 ---------------------------------
