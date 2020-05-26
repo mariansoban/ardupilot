@@ -13,6 +13,7 @@
 #include <AP_AdvancedFailsafe/AP_AdvancedFailsafe.h>
 #include <AP_RTC/JitterCorrection.h>
 #include <AP_Common/Bitmask.h>
+#include <AP_LTM_Telem/AP_LTM_Telem.h>
 #include <AP_Devo_Telem/AP_Devo_Telem.h>
 #include <RC_Channel/RC_Channel.h>
 #include <AP_Filesystem/AP_Filesystem_Available.h>
@@ -846,6 +847,9 @@ public:
 
     // frsky backend
     AP_Frsky_Telem *frsky;
+
+    // LTM backend
+    AP_LTM_Telem ltm_telemetry;
 
 #if !HAL_MINIMIZE_FEATURES
     // Devo backend
