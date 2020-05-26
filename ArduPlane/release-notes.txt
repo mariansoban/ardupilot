@@ -1,3 +1,8 @@
+Release 4.0.5-sobi-frsky-8m-ltm, 26th May 2020
+-----------------------------
+Changes from 4.0.5-sobi-frsky-8m
+1) [ms] added support for LTM telemetry protocol - serial protocol index 25:LTM
+
 Release 4.0.5-sobi-frsky-8m, 24th May 2020
 -----------------------------
 Changes from 4.0.5-sobi-frsky
