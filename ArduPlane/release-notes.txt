@@ -1,3 +1,8 @@
+Release 4.0.5-sobi-frsky-8m-ltm-ser2, 27th July 2020
+-----------------------------
+Changes from 4.0.5-sobi-frsky-8m-ltm
+1) [ms] Omnibus F4 V3 PRO - use I2C pins for UART3/SERIAL2
+
 Release 4.0.5-sobi-frsky-8m-ltm, 26th May 2020
 -----------------------------
 Changes from 4.0.5-sobi-frsky-8m
