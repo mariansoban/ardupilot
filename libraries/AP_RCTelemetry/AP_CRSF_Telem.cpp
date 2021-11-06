@@ -726,6 +726,75 @@ void AP_CRSF_Telem::calc_battery()
     _telem_pending = true;
 }
 
+// XXX [ms] customize CRSF telemetry data for ELRS
+/*
+  get lon1-lon2, wrapping at -180e7 to 180e7
+ */
+int32_t AP_CRSF_Telem::diff_longitude(int32_t lon1, int32_t lon2) const
+{
+    if ((lon1 & 0x80000000) == (lon2 & 0x80000000)) {
+        // common case of same sign
+        return lon1 - lon2;
+    }
+    int64_t dlon = int64_t(lon1)-int64_t(lon2);
+    if (dlon > 1800000000LL) {
+        dlon -= 3600000000LL;
+    } else if (dlon < -1800000000LL) {
+        dlon += 3600000000LL;
+    }
+    return int32_t(dlon);
+}
+
+// XXX [ms] customize CRSF telemetry data for ELRS
+// return bearing in centidegrees from loc1 to loc2
+uint16_t AP_CRSF_Telem::get_bearing_to(const struct Location &loc1, const struct Location &loc2) const
+{
+    const int32_t off_x = diff_longitude(loc2.lng, loc1.lng);
+    const int32_t off_y = (loc2.lat - loc1.lat) / loc2.longitude_scale((loc1.lat+loc2.lat) / 2);
+    int32_t bearing = 9000 + atan2f(-off_y, off_x) * DEGX100;
+        if (bearing < 0) {
+        bearing += 36000;
+    }
+    return (uint16_t) bearing;
+}
+
+// XXX [ms] customize CRSF telemetry data for ELRS
+void AP_CRSF_Telem::get_custom_telemetry_data()
+{
+    _custom_telemetry_data.home_distance = 0;
+    _custom_telemetry_data.home_heading = 0;
+    _custom_telemetry_data.relative_home_altitude = 0;
+    Location loc;
+    Location home_loc;
+    bool got_position = false;
+    float relative_home_altitude = 0;
+
+    {
+        AP_AHRS &_ahrs = AP::ahrs();
+        WITH_SEMAPHORE(_ahrs.get_semaphore());
+        got_position = _ahrs.get_position(loc);
+        home_loc = _ahrs.get_home();
+    }
+
+    if (got_position) {
+        // check home_loc is valid
+        if (home_loc.lat != 0 || home_loc.lng != 0) {
+            // distance between vehicle and home_loc in meters
+            _custom_telemetry_data.home_distance = roundf(home_loc.get_distance(loc));
+            // angle from front of vehicle to the direction of home_loc
+            _custom_telemetry_data.home_heading = roundf(get_bearing_to(loc, home_loc));
+        }
+        // altitude between vehicle and home_loc
+        relative_home_altitude = loc.alt;
+        if (!loc.relative_alt) {
+            // loc.alt has home altitude added, remove it
+            relative_home_altitude -= home_loc.alt;
+        }
+    }
+    // altitude above home in meters
+    _custom_telemetry_data.relative_home_altitude = roundf(relative_home_altitude);
+}
+
 // prepare gps data
 void AP_CRSF_Telem::calc_gps()
 {
@@ -734,8 +803,18 @@ void AP_CRSF_Telem::calc_gps()
     _telem.bcast.gps.latitude = htobe32(loc.lat);
     _telem.bcast.gps.longitude = htobe32(loc.lng);
     _telem.bcast.gps.groundspeed = htobe16(roundf(AP::gps().ground_speed() * 100000 / 3600));
-    _telem.bcast.gps.altitude = htobe16(constrain_int16(loc.alt / 100, 0, 5000) + 1000);
-    _telem.bcast.gps.gps_heading = htobe16(roundf(AP::gps().ground_course() * 100.0f));
+    // XXX [ms] customize CRSF telemetry data for ELRS
+    get_custom_telemetry_data();
+    // XXX [ms] replace with home altitude; note: 1000 should get added to result value (@param altitude Altitude [meters + 1000m offset])
+    // _telem.bcast.gps.altitude = htobe16(constrain_int16(loc.alt / 100, 0, 5000) + 1000);
+    // also convert from cm to m
+    _telem.bcast.gps.altitude = htobe16((_custom_telemetry_data.relative_home_altitude / 100) + 1000);
+    // XXX [ms] replace with home heading
+    // _telem.bcast.gps.gps_heading = htobe16(roundf(AP::gps().ground_course() * 100.0f));
+    // _telem.bcast.gps.gps_heading = htobe16(_custom_telemetry_data.home_heading);
+    // _telem.bcast.gps.gps_heading = htobe16(roundf(_custom_telemetry_data.home_heading / 100.0f));
+    // XXX [ms] value should get probably sent in 1/100 of degree
+    _telem.bcast.gps.gps_heading = htobe16(roundf(_custom_telemetry_data.home_heading));
     _telem.bcast.gps.satellites = AP::gps().num_sats();
 
     _telem_size = sizeof(AP_CRSF_Telem::GPSFrame);
@@ -754,7 +833,10 @@ void AP_CRSF_Telem::calc_attitude()
     // units are radians * 10000
     _telem.bcast.attitude.roll_angle = htobe16(constrain_int16(roundf(wrap_PI(_ahrs.roll) * 10000.0f), -INT_PI, INT_PI));
     _telem.bcast.attitude.pitch_angle = htobe16(constrain_int16(roundf(wrap_PI(_ahrs.pitch) * 10000.0f), -INT_PI, INT_PI));
-    _telem.bcast.attitude.yaw_angle = htobe16(constrain_int16(roundf(wrap_PI(_ahrs.yaw) * 10000.0f), -INT_PI, INT_PI));
+    // XXX [ms] replace with home distance
+    // _telem.bcast.attitude.yaw_angle = htobe16(constrain_int16(roundf(wrap_PI(_ahrs.yaw) * 10000.0f), -INT_PI, INT_PI));
+    // this will require some magic in yaw data conversion to home distance in meters at Radio TX side...
+    _telem.bcast.attitude.yaw_angle = htobe16(constrain_int16(roundf((_custom_telemetry_data.home_distance * 10.0f) - INT_PI), -INT_PI, INT_PI));
 
     _telem_size = sizeof(AP_CRSF_Telem::AttitudeFrame);
     _telem_type = AP_RCProtocol_CRSF::CRSF_FRAMETYPE_ATTITUDE;

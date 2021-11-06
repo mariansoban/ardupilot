@@ -303,6 +303,17 @@ private:
     bool _get_telem_data(AP_RCProtocol_CRSF::Frame* data);
     bool _process_frame(AP_RCProtocol_CRSF::FrameType frame_type, void* data);
 
+    // XXX [ms] customize CRSF telemetry data for ELRS
+    void get_custom_telemetry_data();
+    // XXX [ms] customize CRSF telemetry data for ELRS
+    /*
+    get lon1-lon2, wrapping at -180e7 to 180e7
+    */
+    int32_t diff_longitude(int32_t lon1, int32_t lon2) const;
+    // XXX [ms] customize CRSF telemetry data for ELRS
+    // return bearing in centidegrees from loc1 to loc2
+    uint16_t get_bearing_to(const struct Location &loc1, const struct Location &loc2) const;
+
     TelemetryPayload _telem;
     uint8_t _telem_size;
     uint8_t _telem_type;
@@ -340,6 +351,13 @@ private:
     bool _vtx_freq_change_pending; // a vtx command has been issued but not confirmed by a vtx broadcast frame
     bool _vtx_power_change_pending;
     bool _vtx_options_change_pending;
+
+    // XXX [ms] customize CRSF telemetry data for ELRS
+    struct {
+        uint16_t home_distance;
+        uint16_t home_heading;
+        uint16_t relative_home_altitude;
+    } _custom_telemetry_data;
 
     static AP_CRSF_Telem *singleton;
 };
