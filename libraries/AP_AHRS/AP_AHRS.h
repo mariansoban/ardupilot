@@ -615,6 +615,7 @@ public:
     void Write_Attitude(const Vector3f &targets) const;
     void Write_Origin(uint8_t origin_type, const Location &loc) const; 
     void Write_POS(void) const;
+    void write_video_stabilisation() const;    
 
 protected:
     void update_nmea_out();
