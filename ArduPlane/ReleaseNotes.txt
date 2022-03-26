@@ -1,3 +1,8 @@
+Release 4.1.7-sobi-gyroflow 26th March 2022
+--------------------------------
+
+ - GyroFlow logging (see LOG_BITMASK's "VideoStabilization" option)
+
 Release 4.1.7 12th February 2022
 --------------------------------
 
