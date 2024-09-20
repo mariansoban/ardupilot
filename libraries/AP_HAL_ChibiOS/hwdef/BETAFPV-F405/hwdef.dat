@@ -74,6 +74,13 @@ define DEFAULT_SERIAL4_PROTOCOL SerialProtocol_DJI_FPV
 
 # USART6 (SBUS, inverted)
 PC7 USART6_RX USART6
+# full USART6 for FC Beta FPV F4 2-3S 20A AIO FC V1
+# PC6 USART6_TX USART6
+# PC7 USART6_RX USART6
+
+# LED strip on tx6 as gpio/relay - use gpio 91
+PC6 TIM8_CH1 TIM8 GPIO(91)
+
 
 # I2C ports
 I2C_ORDER
