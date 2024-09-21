@@ -205,9 +205,10 @@ void AP_RCTelemetry::check_sensor_status_flags(void)
         } else if ((_sensor_status_flags & MAV_SYS_STATUS_SENSOR_3D_ACCEL) > 0) {
             queue_message(MAV_SEVERITY_CRITICAL, "Bad Accel Health");
             check_sensor_status_timer = now;
-        } else if ((_sensor_status_flags & MAV_SYS_STATUS_SENSOR_3D_MAG) > 0) {
-            queue_message(MAV_SEVERITY_CRITICAL, "Bad Compass Health");
-            check_sensor_status_timer = now;
+        // XXX [ms] ignore "Bad Compass Health" message since we don't use any compass
+        // } else if ((_sensor_status_flags & MAV_SYS_STATUS_SENSOR_3D_MAG) > 0) {
+        //     queue_message(MAV_SEVERITY_CRITICAL, "Bad Compass Health");
+        //     check_sensor_status_timer = now;
         } else if ((_sensor_status_flags & MAV_SYS_STATUS_SENSOR_ABSOLUTE_PRESSURE) > 0) {
             queue_message(MAV_SEVERITY_CRITICAL, "Bad Baro Health");
             check_sensor_status_timer = now;
