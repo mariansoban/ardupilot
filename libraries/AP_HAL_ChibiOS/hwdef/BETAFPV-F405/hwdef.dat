@@ -48,6 +48,12 @@ PA4 GYRO1_CS CS
 PB4 BUZZER OUTPUT GPIO(80) LOW
 define HAL_BUZZER_PIN 80
 
+# LED strip
+# XXX [ms] LED strip on SDA1 pin as gpio/relay - use gpio 91
+# PC6 TIM8_CH1 TIM8 GPIO(91)
+# use SDA1 - PB9 as GPIO pin for LED strip
+PB9 TIM4_CH4 TIM4 GPIO(91)
+
 # SERIAL ports
 SERIAL_ORDER OTG1 USART1 EMPTY USART3 UART4 EMPTY USART6
 # PA10 IO-debug-console
@@ -62,28 +68,40 @@ define DEFAULT_SERIAL1_PROTOCOL SerialProtocol_GPS
 define DEFAULT_SERIAL2_PROTOCOL SerialProtocol_None
 define DEFAULT_SERIAL5_PROTOCOL SerialProtocol_None
 
+# XXX [ms] let's use USART3 as I2C2 and use USART6 for GPS instead of LED strip relay1 pin
 # USART3 (ELRS)
-PB10 USART3_TX USART3
-PB11 USART3_RX USART3
-define DEFAULT_SERIAL3_PROTOCOL SerialProtocol_RCIN
+# PB10 USART3_TX USART3
+# PB11 USART3_RX USART3
+# define DEFAULT_SERIAL3_PROTOCOL SerialProtocol_RCIN
+PB10 USART3_TX USART3 ALT(1)
+PB11 USART3_RX USART3 ALT(1)
+# note that this board needs PULLUP on I2C pins
+# PB10 I2C2_SCL I2C2 PULLUP
+# PB11 I2C2_SDA I2C2 PULLUP
+PB10 I2C2_SCL I2C2
+PB11 I2C2_SDA I2C2
 
 # UART4 (DJI)
 PA0 UART4_TX UART4 NODMA
 PA1 UART4_RX UART4 NODMA
 define DEFAULT_SERIAL4_PROTOCOL SerialProtocol_DJI_FPV
 
+# XXX [ms] let's use USART3 as I2C2 and use USART6 for GPS instead of LED strip relay1 pin
 # USART6 (SBUS, inverted)
-PC7 USART6_RX USART6
-# full USART6 for FC Beta FPV F4 2-3S 20A AIO FC V1
-# PC6 USART6_TX USART6
 # PC7 USART6_RX USART6
+# full USART6 for FC Beta FPV F4 2-3S 20A AIO FC V1
+PC6 USART6_TX USART6
+PC7 USART6_RX USART6
 
-# XXX [ms] LED strip on tx6 as gpio/relay - use gpio 91
-PC6 TIM8_CH1 TIM8 GPIO(91)
-
-
+# XXX [ms] let's use USART3 as I2C2 and use USART6 for GPS instead of LED strip relay1 pin
 # I2C ports
-I2C_ORDER
+# I2C_ORDER
+I2C_ORDER I2C2
+
+# XXX [ms] let's use USART3 as I2C2 and use USART6 for GPS instead of LED strip relay1 pin
+# we need I2C clock at 400kHz for IMU
+define HAL_I2C_MAX_CLOCK 400000
+
 # Servos
 
 # ADC ports
@@ -144,18 +162,28 @@ define AP_BARO_BMP280_ENABLED 0
 define AP_BARO_DPS280_ENABLED 1
 
 # IMU setup
-SPIDEV imu1   SPI1 DEVID1 GYRO1_CS   MODE3   1*MHZ   8*MHZ
-IMU Invensensev3 SPI:imu1 ROTATION_ROLL_180_YAW_270
+# SPIDEV imu1   SPI1 DEVID1 GYRO1_CS   MODE3   1*MHZ   8*MHZ
+# IMU Invensensev3 SPI:imu1 ROTATION_ROLL_180_YAW_270
+
+# IMU setup - MP6050 on I2C2 (i2c bus 0)
+# IMU Invensense I2C:0:0x68 ROTATION_NONE
+IMU Invensense I2C:0:0x68 ROTATION_ROLL_180_YAW_270
+
+
 DMA_NOSHARE SPI1*
 DMA_PRIORITY TIM3* TIM2* SPI1*
+# DMA_PRIORITY TIM3* I2C2* TIM2* SPI1*
 
 # no built-in compass, but probe the i2c bus for all possible
 # external compass types
 define ALLOW_ARM_NO_COMPASS
 define HAL_PROBE_EXTERNAL_I2C_COMPASSES
+# XXX [ms] let's use USART3 as I2C2 and use USART6 for GPS instead of LED strip relay1 pin
 define HAL_I2C_INTERNAL_MASK 0
+
 define HAL_COMPASS_AUTO_ROT_DEFAULT 2
-define HAL_DEFAULT_INS_FAST_SAMPLE 1
+# XXX [ms] let's use USART3 as I2C2 and use USART6 for GPS instead of LED strip relay1 pin
+# define HAL_DEFAULT_INS_FAST_SAMPLE 1
 # Motor order implies Betaflight/X for standard ESCs
 define HAL_FRAME_TYPE_DEFAULT 12
 
