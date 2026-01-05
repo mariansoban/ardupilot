@@ -48,6 +48,16 @@ PA4 GYRO1_CS CS
 PB4 BUZZER OUTPUT GPIO(80) LOW
 define HAL_BUZZER_PIN 80
 
+# XXX [ms] DJI Air Unit switch on/off on SCL1 pin as gpio/relay 1 - use gpio 91
+# use SCL1 - PB8 as GPIO pin for DJI Air Unit switch
+PB8 TIM4_CH3 TIM4 GPIO(91)
+define RELAY1_PIN_DEFAULT 91
+
+# XXX [ms] LED strip on SDA1 pin as gpio/relay 2 - use gpio 92
+# use SDA1 - PB9 as GPIO pin for LED strip
+PB9 TIM4_CH4 TIM4 GPIO(92)
+define RELAY2_PIN_DEFAULT 92
+
 # SERIAL ports
 SERIAL_ORDER OTG1 USART1 EMPTY USART3 UART4 UART5 USART6
 # PA10 IO-debug-console
@@ -77,9 +87,10 @@ PD2 UART5_RX UART5 NODMA
 PC7 USART6_RX USART6
 PC6 USART6_TX USART6
 
+# XXX [ms] we use SDA1 pin for LED strip instead
 # IO pin on alternate config
-PC6 EXTERN_GPIO1 OUTPUT GPIO(81) ALT(1)
-define RELAY2_PIN_DEFAULT 81
+# PC6 EXTERN_GPIO1 OUTPUT GPIO(81) ALT(1)
+# define RELAY2_PIN_DEFAULT 81
 
 # I2C ports
 I2C_ORDER
@@ -153,6 +164,10 @@ define HAL_INS_TEMPERATURE_CAL_ENABLE 1
 define AP_BARO_SPL06_BACKGROUND_ENABLE 1
 # 4S version has no baro
 define HAL_BARO_ALLOW_INIT_NO_BARO 1
+
+
+# XXX [ms] disable compass for now
+undefine AP_COMPASS_ENABLED
 
 include ../include/minimize_fpv_osd.inc
 AUTOBUILD_TARGETS Copter
