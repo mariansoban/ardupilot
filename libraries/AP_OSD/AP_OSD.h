@@ -589,6 +589,14 @@ public:
     AP_Int8 arm_scr;
     AP_Int8 disarm_scr;
     AP_Int8 failsafe_scr;
+
+    // per-backend override for the MSP DisplayPort (DJI) OSD output only;
+    // the MAX7456/analog OSD output always follows current_screen
+    AP_Int8 dji_chan;
+    AP_Int16 dji_min;
+    AP_Int16 dji_max;
+    AP_Int8 dji_scr;
+
     AP_Int32 button_delay_ms;
 
 #if AP_OSD_EXTENDED_LNK_STATS
@@ -700,6 +708,8 @@ private:
     void update_stats();
     void update_current_screen();
     void next_screen();
+    // true while dji_chan's PWM value is within [dji_min, dji_max)
+    bool dji_override_active() const;
 
     //variables for screen switching
     uint8_t current_screen;

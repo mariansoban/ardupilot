@@ -168,6 +168,36 @@ const AP_Param::GroupInfo AP_OSD::var_info[] = {
     // @User: Standard
     AP_GROUPINFO("_FS_SCR", 19, AP_OSD, failsafe_scr, 0),
 
+    // @Param: _DJI_CHAN
+    // @DisplayName: DJI OSD override channel
+    // @Description: RC channel used to trigger a DJI-only OSD override. When this channel's PWM value is within DJI_MIN/DJI_MAX, the MSP DisplayPort (DJI) OSD backend switches to DJI_SCR while every other OSD backend (e.g. MAX7456 analog) keeps following the normal screen switching logic unaffected. Typical use: an external analog video switch is driven from this same RC channel, and one of its camera positions is already overlaid by the analog OSD, so the DJI OSD is blanked/reduced for that position to avoid a duplicate overlay. Zero disables the feature.
+    // @Values: 0:Disable,1:Chan1,2:Chan2,3:Chan3,4:Chan4,5:Chan5,6:Chan6,7:Chan7,8:Chan8,9:Chan9,10:Chan10,11:Chan11,12:Chan12,13:Chan13,14:Chan14,15:Chan15,16:Chan16
+    // @User: Advanced
+    AP_GROUPINFO("_DJI_CHAN", 37, AP_OSD, dji_chan, 0),
+
+    // @Param: _DJI_MIN
+    // @DisplayName: DJI OSD override PWM range minimum
+    // @Description: Lower bound (inclusive) of the DJI_CHAN PWM range that triggers the DJI-only OSD override.
+    // @Range: 900 2200
+    // @Units: PWM
+    // @User: Advanced
+    AP_GROUPINFO("_DJI_MIN", 38, AP_OSD, dji_min, 900),
+
+    // @Param: _DJI_MAX
+    // @DisplayName: DJI OSD override PWM range maximum
+    // @Description: Upper bound (exclusive) of the DJI_CHAN PWM range that triggers the DJI-only OSD override.
+    // @Range: 900 2200
+    // @Units: PWM
+    // @User: Advanced
+    AP_GROUPINFO("_DJI_MAX", 39, AP_OSD, dji_max, 2100),
+
+    // @Param: _DJI_SCR
+    // @DisplayName: DJI OSD override screen
+    // @Description: Screen shown on the MSP DisplayPort (DJI) OSD backend only, while DJI_CHAN is within [DJI_MIN, DJI_MAX). Zero blanks the DJI OSD output completely (no elements drawn at all). This never affects the MAX7456/analog OSD output, which always keeps showing the normal current screen.
+    // @Range: 0 6
+    // @User: Advanced
+    AP_GROUPINFO("_DJI_SCR", 40, AP_OSD, dji_scr, 0),
+
 #if OSD_PARAM_ENABLED
     // @Param: _BTN_DELAY
     // @DisplayName: Button delay
@@ -409,14 +439,29 @@ void AP_OSD::osd_thread()
 
 void AP_OSD::update_osd()
 {
+    const bool dji_override = dji_override_active();
+
     for (uint8_t instance = 0; instance < _backend_count; instance++) {
         _backends[instance]->clear();
 
         if (!_disable) {
-            get_screen(current_screen).set_backend(_backends[instance]);
-            // skip drawing for MSP OSD backends to save some resources
-            if (_backends[instance]->get_backend_type() != OSD_MSP) {
-                get_screen(current_screen).draw();
+            const bool is_dji_backend = _backends[instance]->get_backend_type() == OSD_MSP_DISPLAYPORT;
+            bool blank_dji = false;
+            uint8_t screen_idx = current_screen;
+            if (is_dji_backend && dji_override) {
+                if (dji_scr == 0) {
+                    blank_dji = true;
+                } else if (dji_scr > 0 && dji_scr <= AP_OSD_NUM_SCREENS) {
+                    screen_idx = uint8_t(dji_scr - 1);
+                }
+            }
+
+            if (!blank_dji) {
+                get_screen(screen_idx).set_backend(_backends[instance]);
+                // skip drawing for MSP OSD backends to save some resources
+                if (_backends[instance]->get_backend_type() != OSD_MSP) {
+                    get_screen(screen_idx).draw();
+                }
             }
         }
 
@@ -612,6 +657,26 @@ void AP_OSD::next_screen()
         t = (t + 1)%AP_OSD_NUM_SCREENS;
     } while (t != current_screen && !get_screen(t).enabled);
     current_screen = t;
+}
+
+// true while dji_chan's PWM value is within [dji_min, dji_max), used by
+// update_osd() to override the screen shown on MSP DisplayPort (DJI)
+// backends only, independently of current_screen
+bool AP_OSD::dji_override_active() const
+{
+    if (dji_chan <= 0 || dji_min >= dji_max) {
+        return false;
+    }
+#if AP_RC_CHANNEL_ENABLED
+    const RC_Channel *channel = RC_Channels::rc_channel(dji_chan - 1);
+    if (channel == nullptr) {
+        return false;
+    }
+    const int16_t channel_value = channel->get_radio_in();
+    return channel_value >= dji_min && channel_value < dji_max;
+#else
+    return false;
+#endif
 }
 
 // set navigation information for display
