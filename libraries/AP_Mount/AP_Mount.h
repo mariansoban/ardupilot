@@ -242,6 +242,10 @@ public:
     // returns true on success
     bool get_attitude_euler(uint8_t instance, float& roll_deg, float& pitch_deg, float& yaw_bf_deg);
 
+    // get mount's body-frame pan (yaw) angle in degrees for display (e.g. OSD)
+    // returns false if the mount is missing, unhealthy or the angle is not known
+    bool get_pan_bf_deg(uint8_t instance, float& pan_deg);
+
     // run pre-arm check.  returns false on failure and fills in failure_msg
     // any failure_msg returned will not include a prefix
     bool pre_arm_checks(char *failure_msg, uint8_t failure_msg_len);

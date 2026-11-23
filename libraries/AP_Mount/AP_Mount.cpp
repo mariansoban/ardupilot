@@ -682,6 +682,22 @@ bool AP_Mount::get_attitude_quaternion(uint8_t instance, Quaternion& att_quat)
     return backend->get_attitude_quaternion(att_quat);
 }
 
+// get mount's body-frame pan (yaw) angle in degrees for display (e.g. OSD)
+// returns false if the mount is missing, unhealthy or the angle is not known
+bool AP_Mount::get_pan_bf_deg(uint8_t instance, float& pan_deg)
+{
+    auto *backend = get_instance(instance);
+    if (backend == nullptr || !backend->healthy()) {
+        return false;
+    }
+    float pan_rad;
+    if (!backend->get_pan_bf_rad(pan_rad)) {
+        return false;
+    }
+    pan_deg = degrees(wrap_PI(pan_rad));
+    return true;
+}
+
 // get mount's current attitude in euler angles in degrees.  yaw angle is in body-frame
 // returns true on success
 bool AP_Mount::get_attitude_euler(uint8_t instance, float& roll_deg, float& pitch_deg, float& yaw_bf_deg)

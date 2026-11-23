@@ -1,5 +1,30 @@
 ArduPilot Copter Release Notes:
 ------------------------------------------------------------------
+Local build 4.7.3-sobi (not upstream), based on Release 4.7.3
+
+1) DJI-only OSD screen override (AP_OSD, commit 34a8a19f19)
+
+- The MSP DisplayPort (DJI) OSD can show a different screen, or nothing, depending on an RC channel. Other OSD backends (MAX7456 analog) are not affected.
+- Use case: an analog video switch on the same RC channel selects a camera that already has the analog OSD, so the DJI OSD is hidden to avoid a double overlay.
+- Usage:
+  - OSD_DJI_CHAN = RC channel (0 = disabled)
+  - OSD_DJI_MIN / OSD_DJI_MAX = PWM range [MIN, MAX) that activates the override
+  - OSD_DJI_SCR = screen for the DJI OSD in that range (0 = blank)
+  - Example (quad2): OSD_DJI_CHAN=10, OSD_DJI_MIN=1550, OSD_DJI_MAX=1834, OSD_DJI_SCR=0
+
+2) Gimbal pan angle on the OSD (AP_Mount + AP_OSD)
+
+- New OSD_OPTIONS bit 8 (+256): the WIND item shows the gimbal pan (body-frame yaw) instead of wind: "G", a direction arrow (16 directions, respects bit 5 TranslateArrows) and the angle in degrees. Item width is 7 characters.
+- "G  ---" is shown when there is no healthy mount or the angle is unknown.
+- New AP_Mount::get_pan_bf_deg() / AP_Mount_Backend::get_pan_bf_rad() (default implementation from the mount attitude).
+- CADDX (MNT1_TYPE=13) has no feedback, so the angle is the last one SENT to the gimbal (after RC rate integration and YAW_MIN/MAX limits). Dashes are shown in lock mode 0 (gimbal M0/ZERO, the 5 s boot hold, FPV lock) and when the last packet is older than 1 s.
+- Usage:
+  - OSD_OPTIONS += 256
+  - OSDn_WIND_EN = 1, place OSDn_WIND_X/Y so that 7 characters fit
+  - Example mount setup (XFRobot C20-T via CADDX): SERIAL5_PROTOCOL=8, MNT1_TYPE=13, MNT1_RC_RATE=60, MNT1_YAW_MIN/MAX=-140/140, RC6_OPTION=214 (yaw), RC7_OPTION=213 (pitch), RC6_DZ=RC7_DZ=40, RC13_OPTION=185 (MOUNT_RP_LOCK switches gimbal modes M0/M1/M2)
+- Not yet verified on hardware: arrow sign (right = positive) and RC13 LOW = M0.
+
+------------------------------------------------------------------
 Release 4.7.3 14-November-2026 / 4.7.3-beta1 13-Oct-2026
 
 Changes from 4.7.2

@@ -57,6 +57,10 @@ public:
     // return true if healthy
     virtual bool healthy() const { return true; }
 
+    // get the gimbal's body-frame pan (yaw) angle in radians for display (e.g. OSD)
+    // returns false if the angle is not known or the gimbal is not expected to be at it
+    virtual bool get_pan_bf_rad(float& pan_rad);
+
     // return true if this mount accepts roll or pitch targets
     virtual bool has_roll_control() const;
     virtual bool has_pitch_control() const;

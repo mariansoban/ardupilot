@@ -34,6 +34,7 @@
 #endif
 #include <AC_Fence/AC_Fence_config.h>
 #include <AP_RangeFinder/AP_RangeFinder_config.h>
+#include <AP_Mount/AP_Mount_config.h>
 
 class AP_OSD_Backend;
 class AP_MSP;
@@ -292,6 +293,9 @@ private:
 #endif
     void draw_compass(uint8_t x, uint8_t y);
     void draw_wind(uint8_t x, uint8_t y);
+#if HAL_MOUNT_ENABLED
+    void draw_gimbal_pan(uint8_t x, uint8_t y);
+#endif
     void draw_aspeed(uint8_t x, uint8_t y);
     void draw_aspd1(uint8_t x, uint8_t y);
     void draw_aspd2(uint8_t x, uint8_t y);
@@ -620,6 +624,7 @@ public:
 #if AP_OSD_EXTENDED_LNK_STATS
         OPTION_RF_MODE_ALONG_WITH_LQ = 1U<<7,
 #endif
+        OPTION_WIND_SHOWS_GIMBAL_PAN = 1U<<8,
     };
 
     enum {

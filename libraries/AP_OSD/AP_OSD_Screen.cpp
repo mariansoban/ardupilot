@@ -48,6 +48,7 @@
 #if APM_BUILD_TYPE(APM_BUILD_Rover)
 #include <AP_WindVane/AP_WindVane.h>
 #endif
+#include <AP_Mount/AP_Mount.h>
 #include <AP_Filesystem/AP_Filesystem.h>
 
 #include <ctype.h>
@@ -1942,8 +1943,30 @@ void AP_OSD_Screen::draw_compass(uint8_t x, uint8_t y)
     }
 }
 
+#if HAL_MOUNT_ENABLED
+// draw the primary mount's body-frame pan angle: "G", arrow relative to the nose, angle in degrees
+// dashes if the angle is not known (no mount, unhealthy, or gimbal not following the angle target)
+void AP_OSD_Screen::draw_gimbal_pan(uint8_t x, uint8_t y)
+{
+    AP_Mount *mount = AP::mount();
+    float pan_deg;
+    if (mount == nullptr || !mount->get_pan_bf_deg(mount->get_primary_instance(), pan_deg)) {
+        backend->write(x, y, false, "G  ---");
+        return;
+    }
+    const char arrow = get_arrow_font_index(int32_t(pan_deg * 100));
+    backend->write(x, y, false, "G%c%4d%c", arrow, (int)roundf(pan_deg), SYMBOL(SYM_DEGR));
+}
+#endif
+
 void AP_OSD_Screen::draw_wind(uint8_t x, uint8_t y)
 {
+#if HAL_MOUNT_ENABLED
+    if (check_option(AP_OSD::OPTION_WIND_SHOWS_GIMBAL_PAN)) {
+        draw_gimbal_pan(x, y);
+        return;
+    }
+#endif
 #if !APM_BUILD_TYPE(APM_BUILD_Rover)
     AP_AHRS &ahrs = AP::ahrs();
     WITH_SEMAPHORE(ahrs.get_semaphore());

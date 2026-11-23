@@ -995,6 +995,19 @@ bool AP_Mount_Backend::get_angle_target_to_roi(MountAngleTarget& angle_rad) cons
     return get_angle_target_to_location(_roi_target, angle_rad);
 }
 
+// get the gimbal's body-frame pan (yaw) angle in radians for display (e.g. OSD)
+// returns false if the angle is not known
+bool AP_Mount_Backend::get_pan_bf_rad(float& pan_rad)
+{
+    Quaternion att_quat;
+    if (!get_attitude_quaternion(att_quat)) {
+        return false;
+    }
+    float roll_rad, pitch_rad;
+    att_quat.to_euler(roll_rad, pitch_rad, pan_rad);
+    return true;
+}
+
 // return body-frame yaw angle from a mount target
 float AP_Mount_Backend::MountAngleTarget::get_bf_yaw() const
 {

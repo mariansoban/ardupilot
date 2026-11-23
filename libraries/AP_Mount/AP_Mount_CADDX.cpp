@@ -11,6 +11,7 @@
 #define AXIS_MIN 0
 #define AXIS_MAX 4096
 #define LOCK_MODE_BOOT_HOLD_MS 5000 // send body-frame lock mode for this long after the first packet
+#define PAN_DISPLAY_TIMEOUT_MS 1000 // pan angle is reported for display only if a packet was sent within this time
 
 // update mount position - should be called periodically
 void AP_Mount_CADDX::update()
@@ -33,6 +34,22 @@ bool AP_Mount_CADDX::get_attitude_quaternion(Quaternion& att_quat)
 {
     // gimbal does not provide attitude so simply return targets
     att_quat.from_euler(mnt_target.angle_rad.roll, mnt_target.angle_rad.pitch, mnt_target.angle_rad.get_bf_yaw());
+    return true;
+}
+
+// get the body-frame pan angle last sent to the gimbal, for display (e.g. OSD)
+// returns false if nothing was sent recently or the lock mode was zero.
+// With lock mode zero the gimbal may run its own mode (e.g. XFRobot "ZERO" mode selected
+// by the lock bits) and ignore the angles, so the sent angle would be misleading
+bool AP_Mount_CADDX::get_pan_bf_rad(float& pan_rad)
+{
+    if (_last_send_ms == 0 || (AP_HAL::millis() - _last_send_ms) > PAN_DISPLAY_TIMEOUT_MS) {
+        return false;
+    }
+    if (_last_sent_mode == 0) {
+        return false;
+    }
+    pan_rad = _last_sent_yaw_bf_rad;
     return true;
 }
 
@@ -107,6 +124,11 @@ void AP_Mount_CADDX::send_target_angles(const MountAngleTarget& angle_target_rad
 
     // send packet to gimbal
     _uart->write(set_attitude_cmd_buf, sizeof(set_attitude_cmd_buf));
+
+    // remember what was sent for display purposes
+    _last_sent_mode = mode & 0x07;
+    _last_sent_yaw_bf_rad = yaw_target_cmd / scalar;
+    _last_send_ms = now_ms;
 }
 
 #endif // HAL_MOUNT_CADDX_ENABLED

@@ -34,6 +34,10 @@ protected:
     // get attitude as a quaternion.  returns true on success
     bool get_attitude_quaternion(Quaternion& att_quat) override;
 
+    // get the body-frame pan angle last sent to the gimbal, for display (e.g. OSD)
+    // returns false if nothing was sent recently or the lock mode was zero (gimbal ignores angles)
+    bool get_pan_bf_rad(float& pan_rad) override;
+
 private:
 
     // lock mode enum
@@ -52,5 +56,8 @@ private:
     void send_target_angles(const MountAngleTarget& angle_target_rad) override;
 
     uint32_t _first_send_ms;    // system time the first attitude packet was sent to the gimbal
+    uint32_t _last_send_ms;     // system time the last attitude packet was sent to the gimbal
+    uint8_t _last_sent_mode;    // lock mode bits of the last attitude packet
+    float _last_sent_yaw_bf_rad;    // body-frame yaw angle of the last attitude packet
 };
 #endif // HAL_MOUNT_CADDX_ENABLED
